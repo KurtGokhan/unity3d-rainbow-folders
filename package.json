@@ -1,0 +1,12 @@
+{
+  "name": "com.phangorr.unity3d-rainbow-folders",
+  "author": "Ivan Gadzhega",
+  "displayName": "Unity3D Rainbow Folders",
+  "version": "0.1.1",
+  "unity": "2019.1",
+  "description": "With 'Rainbow Folders' you can set custom icon for any folder in unity project browser.",
+  "keywords": [
+    "Editor"
+  ],
+  "category": "Scripts"
+}
