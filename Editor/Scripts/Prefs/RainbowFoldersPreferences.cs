@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
@@ -20,23 +20,33 @@ namespace Borodar.RainbowFolders.Editor
 {
     public class RainbowFoldersPreferences
     {
+        private const string SETTINGS_FOLDER_PREF_KEY = "Borodar.RainbowFolders.SettingsFolder.";
+        private const string SETTINGS_FOLDER_DEFAULT = "Assets/Plugins/RainbowFolders";
+        private const string SETTINGS_FOLDER_HINT = "Change this setting to the new location of the \"Rainbow Folders\" if you move the folder around in your project.";
+
         private const string HOME_FOLDER_PREF_KEY = "Borodar.RainbowFolders.HomeFolder.";
-        private const string HOME_FOLDER_DEFAULT = "Assets/Plugins/RainbowFolders";
+        private const string HOME_FOLDER_DEFAULT = "Packages/com.phangorr.unity3d-rainbow-folders";
         private const string HOME_FOLDER_HINT = "Change this setting to the new location of the \"Rainbow Folders\" if you move the folder around in your project.";
 
         private const string MOD_KEY_PREF_KEY = "Borodar.RainbowFolders.EditMod.";
         private const EventModifiers MOD_KEY_DEFAULT = EventModifiers.Alt;
         private const string MOD_KEY_HINT = "Modifier key that is used to show configuration dialogue when clicking on a folder icon.";
 
+        private static readonly EditorPrefsString SETTINGS_FOLDER_PREF;
         private static readonly EditorPrefsString HOME_FOLDER_PREF;
         private static readonly EditorPrefsModifierKey MODIFIER_KEY_PREF ;
 
+        public static string SettingsFolder;
         public static string HomeFolder;
         public static EventModifiers ModifierKey;
 
         static RainbowFoldersPreferences()
         {
-            var homeLabel = new GUIContent("Folder Location", HOME_FOLDER_HINT);
+            var settingsLabel = new GUIContent("Settings Location", SETTINGS_FOLDER_HINT);
+            SETTINGS_FOLDER_PREF = new EditorPrefsString(SETTINGS_FOLDER_PREF_KEY + ProjectName, settingsLabel, SETTINGS_FOLDER_DEFAULT);
+            SettingsFolder = SETTINGS_FOLDER_PREF.Value;
+
+            var homeLabel = new GUIContent("Assets Location", HOME_FOLDER_HINT);
             HOME_FOLDER_PREF = new EditorPrefsString(HOME_FOLDER_PREF_KEY + ProjectName, homeLabel, HOME_FOLDER_DEFAULT);
             HomeFolder = HOME_FOLDER_PREF.Value;
 
@@ -52,6 +62,10 @@ namespace Borodar.RainbowFolders.Editor
         [PreferenceItem("Rainbow Folders")]
         public static void EditorPreferences()
         {
+            EditorGUILayout.Separator();
+            SETTINGS_FOLDER_PREF.Draw();
+            SettingsFolder = SETTINGS_FOLDER_PREF.Value;
+
             EditorGUILayout.Separator();
             HOME_FOLDER_PREF.Draw();
             HomeFolder = HOME_FOLDER_PREF.Value;

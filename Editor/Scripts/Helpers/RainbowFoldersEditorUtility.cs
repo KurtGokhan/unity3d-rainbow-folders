@@ -89,7 +89,15 @@ namespace Borodar.RainbowFolders.Editor
         public static T LoadFromAsset<T>(string relativePath) where T : UnityEngine.Object
         {
             var assetPath = Path.Combine(RainbowFoldersPreferences.HomeFolder, relativePath);
-            var asset = AssetDatabase.LoadAssetAtPath<T>(assetPath);            
+            var asset = AssetDatabase.LoadAssetAtPath<T>(assetPath);
+            if (!asset) Debug.LogError(string.Format(LOAD_ASSET_ERROR_MSG, assetPath));
+            return asset;
+        }
+
+        public static T LoadFromSettings<T>(string relativePath) where T : UnityEngine.Object
+        {
+            var assetPath = Path.Combine(RainbowFoldersPreferences.SettingsFolder, relativePath);
+            var asset = AssetDatabase.LoadAssetAtPath<T>(assetPath);
             if (!asset) Debug.LogError(string.Format(LOAD_ASSET_ERROR_MSG, assetPath));
             return asset;
         }
@@ -131,7 +139,7 @@ namespace Borodar.RainbowFolders.Editor
             return GetTexture(ref _assetLogo, "rainbow_logo_64.png");
         }
 
-        public static Texture2D GetCollabBackground(bool isSmall,bool isPro)
+        public static Texture2D GetCollabBackground(bool isSmall, bool isPro)
         {
             return isSmall
                 ? isPro

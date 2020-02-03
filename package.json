@@ -8,5 +8,12 @@
   "keywords": [
     "Editor"
   ],
-  "category": "Scripts"
+  "category": "Scripts",
+  "samples": [
+    {
+      "displayName": "Default Settings",
+      "description": "Default settings needed for this package to work. (Required)",
+      "path": "Samples~/DefaultSettings"
+    }
+  ]
 }

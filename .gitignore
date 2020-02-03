@@ -242,3 +242,7 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+
+
+# Include Unity package Samples folder
+!Samples~

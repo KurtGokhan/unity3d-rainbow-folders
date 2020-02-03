@@ -38,7 +38,7 @@ namespace Borodar.RainbowFolders.Editor
             get
             {
                 if (_instance == null)
-                    _instance = EditorUtility.LoadFromAsset<FolderColorsStorage>(RELATIVE_PATH);
+                    _instance = EditorUtility.LoadFromSettings<FolderColorsStorage>(RELATIVE_PATH);
 
                 return _instance;
             }
