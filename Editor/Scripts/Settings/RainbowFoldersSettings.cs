@@ -27,7 +27,7 @@ namespace Borodar.RainbowFolders.Editor.Settings
     [HelpURL(AssetInfo.HELP_URL)]
     public class RainbowFoldersSettings : ScriptableObject
     {
-        private const string RELATIVE_PATH = "Editor/Data/RainbowFoldersSettings.asset";
+        private const string RELATIVE_PATH = "Editor/Setting/RainbowFoldersSettings.asset";
         private const string DEVEL_PATH = "Assets/Devel/Editor/Data/RainbowFoldersSettings.asset";
 
         public List<RainbowFolder> Folders;
@@ -47,7 +47,7 @@ namespace Borodar.RainbowFolders.Editor.Settings
                     #if RAINBOW_FOLDERS_DEVEL
                         _instance = AssetDatabase.LoadAssetAtPath<RainbowFoldersSettings>(DEVEL_PATH);
                     #else
-                        _instance = RainbowFoldersEditorUtility.LoadFromSettings<RainbowFoldersSettings>(RELATIVE_PATH);
+                        _instance = RainbowFoldersEditorUtility.LoadSetting<RainbowFoldersSettings>(RELATIVE_PATH);
                     #endif
 
                 return _instance;
@@ -58,10 +58,10 @@ namespace Borodar.RainbowFolders.Editor.Settings
         // Public
         //---------------------------------------------------------------------
 
-        /// <summary>
+        /// <summary>  
         /// Searches for a folder config that has the same type and key values.
         /// Returns the first occurrence within the settings, if found; null otherwise.
-        /// </summary>
+        /// </summary>  
         public RainbowFolder GetFolder(RainbowFolder match)
         {
             if (IsNullOrEmpty(Folders) || match == null) return null;
@@ -71,7 +71,7 @@ namespace Borodar.RainbowFolders.Editor.Settings
         /// <summary>
         /// Searches for a folder config that should be applied for the specified path (regardless of
         /// the key type). Returns the last occurrence within the settings, if found; null otherwise.
-        /// </summary>
+        /// </summary>  
         public RainbowFolder GetFolderByPath(string folderPath, bool allowRecursive = false)
         {
             if (IsNullOrEmpty(Folders)) return null;
@@ -110,10 +110,10 @@ namespace Borodar.RainbowFolders.Editor.Settings
             return null;
         }
 
-        /// <summary>
+        /// <summary>  
         /// Searches for a folder config that has the same type and key, and updates
         /// its other fields with provided value, if found; creates new folder config otherwise.
-        /// </summary>
+        /// </summary>  
         public void UpdateFolder(RainbowFolder match, RainbowFolder value)
         {
             Undo.RecordObject(this, "Modify Rainbow Folder Settings");

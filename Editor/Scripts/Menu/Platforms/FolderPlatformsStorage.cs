@@ -22,7 +22,7 @@ namespace Borodar.RainbowFolders.Editor
 {
     public class FolderPlatformsStorage : ScriptableObject
     {
-        private const string RELATIVE_PATH = "Editor/Data/FolderPlatformsStorage.asset";
+        private const string RELATIVE_PATH = "Editor/Setting/FolderPlatformsStorage.asset";
 
         public List<FolderPlatform> PlatformFolderIcons;
 
@@ -38,7 +38,7 @@ namespace Borodar.RainbowFolders.Editor
             get
             {
                 if (_instance == null)
-                    _instance = EditorUtility.LoadFromSettings<FolderPlatformsStorage>(RELATIVE_PATH);
+                    _instance = EditorUtility.LoadSetting<FolderPlatformsStorage>(RELATIVE_PATH);
 
                 return _instance;
             }

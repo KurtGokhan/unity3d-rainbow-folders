@@ -1,19 +1,26 @@
 {
   "name": "com.phangorr.unity3d-rainbow-folders",
-  "author": "Ivan Gadzhega",
-  "displayName": "Unity3D Rainbow Folders",
-  "version": "0.1.1",
+  "author": "Ivan Gadzhega (github.com/KurtGokhan), Team (github.com/Team-on)",
+  "displayName": "Rainbow Folders",
+  "version": "0.7.2",
   "unity": "2019.1",
-  "description": "With 'Rainbow Folders' you can set custom icon for any folder in unity project browser.",
+  "description": "This asset allows you to set custom icons for any folder in unity project browser.",
+  "type": "tool",
   "keywords": [
-    "Editor"
+    "Editor",
+	"Project"
   ],
   "category": "Scripts",
   "samples": [
     {
-      "displayName": "Default Settings",
-      "description": "Default settings needed for this package to work. (Required)",
-      "path": "Samples~/DefaultSettings"
+      "displayName": "Demo scenes recursive",
+      "description": "Test scenes recursive",
+      "path": "Samples~/Devel"
+    },
+    {
+      "displayName": "Demo scenes original",
+      "description": "Test scenes all types",
+      "path": "Samples~/OriginalExample"
     }
   ]
 }

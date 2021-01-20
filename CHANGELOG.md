@@ -2,6 +2,13 @@
 
 ---
 
+## v0.7.2
+
++ Merge with Team's version to fix null references exceptions (https://github.com/Team-on/unity3d-rainbow-folders)
++ Fix PreferencesItem attribute warning. Now uses SettingsProvider for Unity 2018.3+ 
+
+---
+
 ## v0.7.1
 
 + Added support for Unity Version Control Overlay (beta)

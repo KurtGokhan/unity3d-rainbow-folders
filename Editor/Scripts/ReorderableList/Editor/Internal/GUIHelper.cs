@@ -19,12 +19,12 @@ namespace Borodar.ReorderableList.Internal {
 			if (tyGUIClip != null) {
 				var piVisibleRect = tyGUIClip.GetProperty("visibleRect", BindingFlags.Static | BindingFlags.NonPublic);
 				if (piVisibleRect != null)
-				{
-					var get = piVisibleRect.GetGetMethod(true);
+                {
+                    var get = piVisibleRect.GetGetMethod(true);
 					VisibleRect = (Func<Rect>)Delegate.CreateDelegate(typeof(Func<Rect>), get);
-				}
+                }
 			}
-
+			
 			var miFocusTextInControl = typeof(EditorGUI).GetMethod("FocusTextInControl", BindingFlags.Static | BindingFlags.Public);
 			if (miFocusTextInControl == null)
 				miFocusTextInControl = typeof(GUI).GetMethod("FocusControl", BindingFlags.Static | BindingFlags.Public);
