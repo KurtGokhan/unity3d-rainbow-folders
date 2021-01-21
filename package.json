@@ -2,7 +2,7 @@
   "name": "com.phangorr.unity3d-rainbow-folders",
   "author": "Ivan Gadzhega (github.com/KurtGokhan), Team (github.com/Team-on)",
   "displayName": "Rainbow Folders",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "unity": "2019.1",
   "description": "This asset allows you to set custom icons for any folder in unity project browser.",
   "type": "tool",

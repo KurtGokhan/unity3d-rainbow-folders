@@ -13,6 +13,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -86,10 +87,40 @@ namespace Borodar.RainbowFolders.Editor
             Selection.activeObject = asset;
         }
 
+        public static List<T> FindAssetsByType<T>() where T : UnityEngine.Object
+        {
+            List<T> assets = new List<T>();
+            string[] guids = AssetDatabase.FindAssets($"t:{typeof(T)}");
+            for( int i = 0; i < guids.Length; i++ )
+            {
+                string assetPath = AssetDatabase.GUIDToAssetPath( guids[i] );
+
+                if(assetPath.StartsWith("Packages"))
+                    continue;
+
+                T asset = AssetDatabase.LoadAssetAtPath<T>( assetPath );
+                if(asset != null)
+                {
+                    assets.Add(asset);
+                }
+            }
+            return assets;
+        }
+
         public static T LoadSetting<T>(string relativePath) where T : UnityEngine.Object
         {
             var assetPath = Path.Combine("Assets/", relativePath);
-            var asset = AssetDatabase.LoadAssetAtPath<T>(assetPath);
+            // var asset = AssetDatabase.LoadAssetAtPath<T>(assetPath);
+
+            T asset = null;
+            var assets = FindAssetsByType<T>();
+            if (assets.Count > 0)
+            {
+                asset = assets[0];
+
+                if(assets.Count > 1)
+                    Debug.LogWarning($"There is more than one instance of type {typeof(T).Name} in the Assets folder. {assets[0].name} was selected", assets[0]);
+            }
 
             if (!asset) {
                 string name = typeof(T).Name;
