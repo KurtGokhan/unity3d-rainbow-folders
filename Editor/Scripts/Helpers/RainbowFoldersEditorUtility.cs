@@ -13,6 +13,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -86,19 +87,82 @@ namespace Borodar.RainbowFolders.Editor
             Selection.activeObject = asset;
         }
 
-        public static T LoadFromAsset<T>(string relativePath) where T : UnityEngine.Object
+        public static List<T> FindAssetsByType<T>() where T : UnityEngine.Object
         {
-            var assetPath = Path.Combine(RainbowFoldersPreferences.HomeFolder, relativePath);
-            var asset = AssetDatabase.LoadAssetAtPath<T>(assetPath);
-            if (!asset) Debug.LogError(string.Format(LOAD_ASSET_ERROR_MSG, assetPath));
+            List<T> assets = new List<T>();
+            string[] guids = AssetDatabase.FindAssets($"t:{typeof(T)}");
+            for( int i = 0; i < guids.Length; i++ )
+            {
+                string assetPath = AssetDatabase.GUIDToAssetPath( guids[i] );
+
+                if(assetPath.StartsWith("Packages"))
+                    continue;
+
+                T asset = AssetDatabase.LoadAssetAtPath<T>( assetPath );
+                if(asset != null)
+                {
+                    assets.Add(asset);
+                }
+            }
+            return assets;
+        }
+
+        public static T LoadSetting<T>(string relativePath) where T : UnityEngine.Object
+        {
+            var assetPath = Path.Combine("Assets/", relativePath);
+            // var asset = AssetDatabase.LoadAssetAtPath<T>(assetPath);
+
+            T asset = null;
+            var assets = FindAssetsByType<T>();
+            if (assets.Count > 0)
+            {
+                asset = assets[0];
+
+                if(assets.Count > 1)
+                    Debug.LogWarning($"There is more than one instance of type {typeof(T).Name} in the Assets folder. {assets[0].name} was selected", assets[0]);
+            }
+
+            if (!asset) {
+                string name = typeof(T).Name;
+                string guid = AssetDatabase.FindAssets($"{name}")[0];
+                string originalAssetPath = AssetDatabase.GUIDToAssetPath(guid);
+                asset = AssetDatabase.LoadAssetAtPath<T>(originalAssetPath);
+
+                if (name == "RainbowFoldersSettings") {
+                    Settings.RainbowFoldersSettings originalData = asset as Settings.RainbowFoldersSettings;
+                    Settings.RainbowFoldersSettings newData = ScriptableObject.CreateInstance(typeof(T)) as Settings.RainbowFoldersSettings;
+                    newData.Folders = new System.Collections.Generic.List<Settings.RainbowFolder>(originalData.Folders.Count);
+                    for(int i = 0; i < originalData.Folders.Count; ++i) {
+                        newData.Folders.Add(new Settings.RainbowFolder(originalData.Folders[i]));
+                    }
+
+                    string[] dirs = assetPath.Split('/');
+                    string allPath = dirs[0];
+                    for(int i = 1; i < dirs.Length - 1; ++i) {
+						if (!AssetDatabase.IsValidFolder(allPath + "/" + dirs[i])) {
+                            AssetDatabase.CreateFolder(allPath, dirs[i]);
+                        }
+                        allPath = allPath + "/" + dirs[i];
+                    }
+
+                    AssetDatabase.CreateAsset(newData, assetPath);
+                    AssetDatabase.SaveAssets();
+                    asset = AssetDatabase.LoadAssetAtPath<T>(assetPath);
+                }
+            }
+
             return asset;
         }
 
-        public static T LoadFromSettings<T>(string relativePath) where T : UnityEngine.Object
+        public static T LoadFromPackages<T>(string relativePath) where T : UnityEngine.Object
         {
-            var assetPath = Path.Combine(RainbowFoldersPreferences.SettingsFolder, relativePath);
+            var assetPath = Path.Combine("Packages/com.phangorr.unity3d-rainbow-folders/", relativePath);
             var asset = AssetDatabase.LoadAssetAtPath<T>(assetPath);
-            if (!asset) Debug.LogError(string.Format(LOAD_ASSET_ERROR_MSG, assetPath));
+
+            if (!asset) {
+                return null;
+            }
+
             return asset;
         }
 
@@ -139,7 +203,7 @@ namespace Borodar.RainbowFolders.Editor
             return GetTexture(ref _assetLogo, "rainbow_logo_64.png");
         }
 
-        public static Texture2D GetCollabBackground(bool isSmall, bool isPro)
+        public static Texture2D GetCollabBackground(bool isSmall,bool isPro)
         {
             return isSmall
                 ? isPro
@@ -184,7 +248,7 @@ namespace Borodar.RainbowFolders.Editor
         private static Texture2D GetTexture(ref Texture2D texture, string fileName)
         {
             if (texture == null)
-                texture = LoadFromAsset<Texture2D>("Editor/Textures/" + fileName);
+                texture = LoadFromPackages<Texture2D>("Editor/Textures/" + fileName);
 
             return texture;
         }
